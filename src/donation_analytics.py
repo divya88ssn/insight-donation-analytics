@@ -17,9 +17,8 @@ def main(argv) :
 	totalAmount = {} #dictionary which uses recipient+zip+year as key
 	totalTransactions = {} #dictionary that uses recipient+zip+year as key
 
-	#create and write to a temp file that identifies repeat donor records
-	tempFile = os.getcwd() + "/output/repeat_records.txt"
-	tempHandle = open(tempFile, "w+")
+	#create and write to the designated output file
+	opHandle = open(opFile, "w+")
 
 	fileHandle = open(processFile, "r")
 	for line in fileHandle :
@@ -30,14 +29,14 @@ def main(argv) :
 			donorNameZip.update({donorId:1})
 		else :
 			#update repeat donor info
-			recipientId = fields[0]+fields[2]+fields[3]
+			recipientId = fields[0]+fields[2]+fields[3][-4:]
 
 			#update total amt received for this recipient+zip+year
 			if not totalAmount.has_key(recipientId) :
-				totalAmount.update({recipientId:fields[4]})
+				totalAmount.update({recipientId:long(fields[4])})
 			else :
-				sum = totalAmount[recipientId] + fields[4]
-				totalAMount[recipientId] = sum
+				sum = totalAmount[recipientId] + long(fields[4])
+				totalAmount[recipientId] = sum
 
 			#update total num of transactions for this rec+zip+year
 			if not totalTransactions.has_key(recipientId) :
@@ -45,11 +44,11 @@ def main(argv) :
 			else :
 				sum = totalTransactions[recipientId] + 1
 				totalTransactions[recipientId] = sum
- 
-			tempHandle.write(fields[0]+'|'+fields[2]+'|'+
-					fields[3]+'|'+""+'|'+str(totalAmount[recipientId])+'|'+
+
+			opHandle.write(fields[0]+'|'+fields[2]+'|'+
+					fields[3][-4:]+'|'+""+'|'+str(totalAmount[recipientId])+'|'+
 					str(totalTransactions[recipientId])+"\n")
-	tempHandle.close()
+	opHandle.close()
 	fileHandle.close()
 	sys.exit(0)
 
