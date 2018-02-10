@@ -5,7 +5,6 @@ import math
 from sortedcontainers import SortedList
 
 
-
 #routine to roundup a float to nearest float val
 #
 def roundUp(floatVal) :
