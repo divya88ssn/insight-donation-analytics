@@ -4,14 +4,27 @@ import os
 import math
 from sortedcontainers import SortedList
 
+
+
+#routine to roundup a float to nearest float val
+#
+def roundUp(floatVal) :
+	value = (str(floatVal).split('.'))[1]
+	if (int(value) >= 5) :
+		retVal = math.ceil(floatVal)
+	else :
+		retVal = math.floor(floatVal)
+	return retVal;
+
+
+#routine to return the running percentile of
+#donations for a given zip and year
+#
 def calcPercentile(percentile, ipList) :
 	index = (int(percentile)/100) * len(ipList)
-	value = (str(ipList[index]).split('.'))[1]
-	if (int(value) >= 5) :
-		retVal = math.ceil(ipList[index])
-	else :
-		retVal = math.floor(ipList[index])
+	retVal = roundUp(ipList[index])
 	return long(retVal);
+
 
 def main(argv) :
 	#validate input args
@@ -50,6 +63,7 @@ def main(argv) :
 			else :
 				sum = totalAmount[recipientId] + float(fields[4])
 				totalAmount[recipientId] = sum
+			totAmtForRecId = roundUp(totalAmount[recipientId])
 
 			#update total num of transactions for this rec+zip+year
 			if not totalTransactions.has_key(recipientId) :
@@ -68,10 +82,11 @@ def main(argv) :
 				myList = zipYrDict[zipYrKey]
 				myList.add(float(fields[4]))
 				zipYrDict.update({zipYrKey:myList})
-			value  = calcPercentile(percentile, zipYrDict[zipYrKey])
+			runningPer  = calcPercentile(percentile, zipYrDict[zipYrKey])
 
 			opHandle.write(fields[0]+'|'+fields[2]+'|'+
-					fields[3][-4:]+'|'+str(value)+'|'+str(long(totalAmount[recipientId]))+'|'+
+					fields[3][-4:]+'|'+str(runningPer)+'|'+
+					str(long(totAmtForRecId))+'|'+
 					str(totalTransactions[recipientId])+"\n")
 	opHandle.close()
 	fileHandle.close()
