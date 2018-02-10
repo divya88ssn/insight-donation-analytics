@@ -2,6 +2,7 @@
 import sys
 import os
 import string
+import re
 from datetime import datetime
 
 
@@ -29,8 +30,13 @@ def validateName(name) :
 		return False;
 	if (any(c.isdigit() for c in name)) :
 		return False;
+	if not (re.search('[a-zA-Z]', name)) :
+		return False;
 	invalidChars = set(string.punctuation.replace(",","").
-				replace(".","").replace("&",""))
+				replace(".","").replace("&","").
+				replace("(","").replace(")","").
+				replace("/","").replace("'","").
+				replace("-",""))
 	if (any(char in invalidChars for char in name)) :
 		return False;
 	return True;
