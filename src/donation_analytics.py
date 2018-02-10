@@ -3,6 +3,11 @@ import sys
 import os
 from sortedcontainers import SortedList
 
+def calcPercentile(percentile, ipList) :
+	index = (int(percentile)/100) * len(ipList)
+	value = ipList[index]
+	return value;
+
 def main(argv) :
 	#validate input args
 	index_len = len(sys.argv)
@@ -58,9 +63,10 @@ def main(argv) :
 				myList = zipYrDict[zipYrKey]
 				myList.add(long(fields[4]))
 				zipYrDict.update({zipYrKey:myList})
+			value  = calcPercentile(percentile, zipYrDict[zipYrKey])
 
 			opHandle.write(fields[0]+'|'+fields[2]+'|'+
-					fields[3][-4:]+'|'+""+'|'+str(totalAmount[recipientId])+'|'+
+					fields[3][-4:]+'|'+str(value)+'|'+str(totalAmount[recipientId])+'|'+
 					str(totalTransactions[recipientId])+"\n")
 	opHandle.close()
 	fileHandle.close()
