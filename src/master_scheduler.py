@@ -33,12 +33,12 @@ def main(argv):
 
 	#check if op file location is valid
 	if not os.path.exists(opFile):
-		print "Error, output file location doesnt exist \n"
+		print "Warning, output file location doesnt exist \n"
 		opFile = os.getcwd() + "/output/repeat_donors.txt"
-		print "Taking default path as " + opFile + "\n"
+		print "Continuing script execution taking default path as " + opFile + "\n"
 
 	#create and write to an intermediate output file
-	tempOpFile =  os.getcwd() + "/output/cleanedIpFile.txt"
+	tempOpFile =  os.getcwd() + "/output/cleaned_ip.txt"
 	op = open(tempOpFile, "w+")
 
 	#read from itcont.txt and select lines with valid fields

@@ -70,6 +70,7 @@ def main(argv) :
 					str(totalTransactions[recipientId])+"\n")
 	opHandle.close()
 	fileHandle.close()
+	print "Success! script done executing, pls check "+ opFile + "\n"
 	sys.exit(0)
 
 if __name__ == "__main__" :
