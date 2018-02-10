@@ -39,8 +39,8 @@ def main(argv) :
 	donorNameZip = {} #dictionary which uses donor name+zip as key
 	totalAmount = {} #dictionary which uses recipient+zip+year as key
 	totalTransactions = {} #dictionary which uses recipient+zip+year as key
-	zipYrDict = {} #dictionary that uses zip+year as keys and\
-			#SortedList() to store repeat contribution amount for a given zip+year
+	recZipYrDict = {} #dictionary that uses recipient+zip+year as key and\
+			#SortedList() to store every repeat contribution amount
 
 	#create and write to the designated output file
 	opHandle = open(opFile, "w+")
@@ -72,16 +72,15 @@ def main(argv) :
 				totalTransactions[recipientId] = sum
 
 			#for percentile calculation
-			zipYrKey = fields[2]+fields[3][-4:]
-			if not zipYrDict.has_key(zipYrKey) :
+			if not recZipYrDict.has_key(recipientId) :
 				amtList = SortedList()
 				amtList.add(float(fields[4]))
-				zipYrDict.update({zipYrKey:amtList})
+				recZipYrDict.update({recipientId:amtList})
 			else :
-				myList = zipYrDict[zipYrKey]
+				myList = recZipYrDict[recipientId]
 				myList.add(float(fields[4]))
-				zipYrDict.update({zipYrKey:myList})
-			runningPer  = calcPercentile(percentile, zipYrDict[zipYrKey])
+				recZipYrDict.update({recipientId:myList})
+			runningPer  = calcPercentile(percentile, recZipYrDict[recipientId])
 
 			opHandle.write(fields[0]+'|'+fields[2]+'|'+
 					fields[3][-4:]+'|'+str(runningPer)+'|'+
