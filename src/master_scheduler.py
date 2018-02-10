@@ -29,11 +29,9 @@ def validateName(name) :
 		return False;
 	if (any(c.isdigit() for c in name)) :
 		return False;
-	invalidChars = set(string.punctuation.replace(",",""))
+	invalidChars = set(string.punctuation.replace(",","").
+				replace(".","").replace("&",""))
 	if (any(char in invalidChars for char in name)) :
-		return False;
-	firstName = name.split(',')[0]
-	if (firstName == name) :
 		return False;
 	return True;
 
