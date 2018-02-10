@@ -22,6 +22,8 @@ def roundUp(floatVal) :
 def calcPercentile(percentile, ipList) :
 	tempInd = (float(percentile)/100) * float(len(ipList))
 	index = int((math.ceil(tempInd))-1)
+	if not index >= 0 :
+		index = 0
 	retVal = roundUp(ipList[index])
 	return long(retVal);
 

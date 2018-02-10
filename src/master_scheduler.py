@@ -66,6 +66,9 @@ def main(argv):
 			print "Empty percentile file\n"
 			print "Default percentile value is taken to be " + percentile + "\n"
 	percentFileHandle.close()
+	if (float(percentile) < 0 or float(percentile) > 100) :
+		print "Invalid percentile value: Valid range is: 0 <=  percentile <= 100\n"
+		sys.exit(1)
 
 	#call the script that actually creates the repeat_donors.txt
 	script = os.getcwd() +  "/src/donation_analytics.py"
