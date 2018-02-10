@@ -1,8 +1,83 @@
 #!/usr/bin/python
 import sys
 import os
+import string
+from datetime import datetime
 
-def main(argv):
+
+def validateDate(date) :
+	if(len(date) != 8) :
+		return False;
+	year = date[-4:]
+	day = date[2:4]
+	month = date[0:2]
+	now = datetime.now()
+	if (not day.isdigit() or not month.isdigit() or
+		not year.isdigit()) :
+		return False;
+	if not (int(day) > 0 and int(day) < 32) :
+		return False;
+	if not (int(month) > 0 and int(month) < 13) :
+		return False;
+	if not (int(year) > 0 and int(year) <= int(now.year)) :
+		return False;
+	return True;
+
+
+def validateName(name) :
+	if (len(name) > 200) :
+		return False;
+	if (any(c.isdigit() for c in name)) :
+		return False;
+	invalidChars = set(string.punctuation.replace(",",""))
+	if (any(char in invalidChars for char in name)) :
+		return False;
+	firstName = name.split(',')[0]
+	if (firstName == name) :
+		return False;
+	return True;
+
+
+def validateAmt(tranAmt) :
+	number = tranAmt.split('.')[0]
+	if (len(number) != len(tranAmt)) :
+		decimal = tranAmt.split('.')[1]
+		if (len(decimal) > 2 or len(number+decimal) == 0 or
+			len(number+decimal) > 14) :
+				return False;
+		if (not number.isdigit() or not decimal.isdigit()) :
+			return False;
+	else :
+		if (len(tranAmt) > 14 or not tranAmt.isdigit()) :
+			return False;
+	return True;
+
+
+def validateIpFields(cmteId, name, zipCode,
+			tranDate, tranAmt) :
+	#validate cmteId
+	if (len(cmteId) != 9) :
+		return False;
+	#validate name
+	isValid = validateName(name)
+	if not isValid :
+		return isValid;
+	#validating zipCode
+	if  (len(zipCode) < 5 or len(zipCode) > 9) :
+		return False;
+	elif not (zipCode.isdigit()) :
+		return False;
+	#validating date
+	isValid = validateDate(tranDate)
+	if not isValid :
+		return isValid;
+	#validate amount
+	isValid = validateAmt(tranAmt)
+	if not isValid :
+		return isValid;
+	return True;
+
+def main(argv) :
 	#validate input args
 	index_len = len(sys.argv)
 	if (index_len < 4):
@@ -50,8 +125,11 @@ def main(argv):
 			fields[7] != "" and fields[10] != "" and
 			fields[13] != "" and fields[14] != ""
 		   ):
-			op.write(fields[0]+"|"+fields[7]+"|"+fields[10][:5]+"|"+
-					fields[13]+"|"+fields[14]+"\n")
+			isValid = validateIpFields(fields[0], fields[7], fields[10],
+						fields[13], fields[14])
+			if isValid :
+				op.write(fields[0]+"|"+fields[7]+"|"+fields[10][:5]+"|"+
+						fields[13]+"|"+fields[14]+"\n")
 	ipFile.close()
 	op.close()
 
