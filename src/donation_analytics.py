@@ -1,12 +1,17 @@
 #!/usr/bin/python
 import sys
 import os
+import math
 from sortedcontainers import SortedList
 
 def calcPercentile(percentile, ipList) :
 	index = (int(percentile)/100) * len(ipList)
-	value = ipList[index]
-	return value;
+	value = (str(ipList[index]).split('.'))[1]
+	if (int(value) >= 5) :
+		retVal = math.ceil(ipList[index])
+	else :
+		retVal = math.floor(ipList[index])
+	return long(retVal);
 
 def main(argv) :
 	#validate input args
@@ -41,9 +46,9 @@ def main(argv) :
 
 			#update total amt received for this recipient+zip+year
 			if not totalAmount.has_key(recipientId) :
-				totalAmount.update({recipientId:long(fields[4])})
+				totalAmount.update({recipientId:float(fields[4])})
 			else :
-				sum = totalAmount[recipientId] + long(fields[4])
+				sum = totalAmount[recipientId] + float(fields[4])
 				totalAmount[recipientId] = sum
 
 			#update total num of transactions for this rec+zip+year
@@ -57,16 +62,16 @@ def main(argv) :
 			zipYrKey = fields[2]+fields[3][-4:]
 			if not zipYrDict.has_key(zipYrKey) :
 				amtList = SortedList()
-				amtList.add(long(fields[4]))
+				amtList.add(float(fields[4]))
 				zipYrDict.update({zipYrKey:amtList})
 			else :
 				myList = zipYrDict[zipYrKey]
-				myList.add(long(fields[4]))
+				myList.add(float(fields[4]))
 				zipYrDict.update({zipYrKey:myList})
 			value  = calcPercentile(percentile, zipYrDict[zipYrKey])
 
 			opHandle.write(fields[0]+'|'+fields[2]+'|'+
-					fields[3][-4:]+'|'+str(value)+'|'+str(totalAmount[recipientId])+'|'+
+					fields[3][-4:]+'|'+str(value)+'|'+str(long(totalAmount[recipientId]))+'|'+
 					str(totalTransactions[recipientId])+"\n")
 	opHandle.close()
 	fileHandle.close()
