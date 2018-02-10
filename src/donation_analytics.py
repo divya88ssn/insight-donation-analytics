@@ -20,7 +20,8 @@ def roundUp(floatVal) :
 #donations for a given zip and year
 #
 def calcPercentile(percentile, ipList) :
-	index = (int(percentile)/100) * len(ipList)
+	tempInd = (float(percentile)/100) * float(len(ipList))
+	index = int((math.ceil(tempInd))-1)
 	retVal = roundUp(ipList[index])
 	return long(retVal);
 
