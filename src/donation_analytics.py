@@ -65,6 +65,8 @@ def main(argv) :
 			else :
 				sum = totalAmount[recipientId] + float(fields[4])
 				totalAmount[recipientId] = sum
+			#perform the same approximation as in percentile amount calculation
+			#drop decimal values < $.50 and roundup if > $.50
 			totAmtForRecId = roundUp(totalAmount[recipientId])
 
 			#update total num of transactions for this rec+zip+year
