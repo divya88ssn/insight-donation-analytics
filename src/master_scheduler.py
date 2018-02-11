@@ -7,6 +7,7 @@ from datetime import datetime
 
 
 def validateDate(date) :
+	# expected format "mmddyyyy" acc to FEC
 	if(len(date) != 8) :
 		return False;
 	year = date[-4:]
@@ -26,12 +27,16 @@ def validateDate(date) :
 
 
 def validateName(name) :
+	#varchar 200 according to FEC
 	if (len(name) > 200) :
 		return False;
+	#has no digits
 	if (any(c.isdigit() for c in name)) :
 		return False;
+	#has atleast one letter from alphabet
 	if not (re.search('[a-zA-Z]', name)) :
 		return False;
+	#has no punctuation marks except ,./()'-&
 	invalidChars = set(string.punctuation.replace(",","").
 				replace(".","").replace("&","").
 				replace("(","").replace(")","").
@@ -43,6 +48,7 @@ def validateName(name) :
 
 
 def validateAmt(tranAmt) :
+	# 14 digit precision, scale of 2
 	number = tranAmt.split('.')[0]
 	if (len(number) != len(tranAmt)) :
 		decimal = tranAmt.split('.')[1]
@@ -61,6 +67,7 @@ def validateAmt(tranAmt) :
 def validateIpFields(cmteId, name, zipCode,
 			tranDate, tranAmt) :
 	#validate cmteId
+	#9 digit ID assigned by FEC
 	if (len(cmteId) != 9) :
 		return False;
 	#validate name
