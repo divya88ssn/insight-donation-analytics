@@ -46,9 +46,10 @@ def validateAmt(tranAmt) :
 	number = tranAmt.split('.')[0]
 	if (len(number) != len(tranAmt)) :
 		decimal = tranAmt.split('.')[1]
-		if (len(decimal) > 2 or len(number+decimal) == 0 or
-			len(number+decimal) > 14) :
-				return False;
+		if (len(decimal) > 2) :
+			return False;
+		if (len(number+decimal) == 0 or len(number+decimal) > 14) :
+			return False;
 		if (not number.isdigit() or not decimal.isdigit()) :
 			return False;
 	else :

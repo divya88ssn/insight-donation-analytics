@@ -8,7 +8,7 @@ from sortedcontainers import SortedList
 #routine to roundup a float to nearest float val
 #
 def roundUp(floatVal) :
-	value = (str(floatVal).split('.'))[1]
+	value = (str(floatVal).split('.'))[1][0:1]
 	if (int(value) >= 5) :
 		retVal = math.ceil(floatVal)
 	else :
